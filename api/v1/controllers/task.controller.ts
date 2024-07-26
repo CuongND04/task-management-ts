@@ -162,3 +162,27 @@ export const create = async (req, res) => {
     });
   }
 };
+// [PATCH] /api/v1/tasks/edit/:id
+export const edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+
+    await Task.updateOne(
+      {
+        _id: id,
+      },
+      data
+    );
+
+    res.json({
+      code: 200,
+      message: "Cập nhật công việc thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: `Không hợp lệ!`,
+    });
+  }
+};
