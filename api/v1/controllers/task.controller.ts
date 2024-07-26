@@ -186,3 +186,30 @@ export const edit = async (req, res) => {
     });
   }
 };
+
+// [DELETE] /api/v1/tasks/delete/:id
+export const deleteItem = async (req, res) => {
+  try {
+    const id = req.params.id;
+    // xóa mềm, vẫn lưu ở database
+    await Task.updateOne(
+      {
+        _id: id,
+      },
+      {
+        deleted: true,
+        deletedAt: new Date(),
+      }
+    );
+
+    res.json({
+      code: 200,
+      message: "Xóa công việc thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: `Không hợp lệ!`,
+    });
+  }
+};
