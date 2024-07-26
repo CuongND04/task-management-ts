@@ -89,3 +89,56 @@ export const changeStatus = async (req, res) => {
     });
   }
 };
+
+// [PATCH] /api/v1/tasks/change-multi
+export const changeMulti = async (req: Request, res: Response) => {
+  try {
+    const ids: string[] = req.body.ids;
+    const key: string = req.body.key;
+    const value: string = req.body.value;
+    const listStatus: string[] = [
+      "initial",
+      "doing",
+      "finish",
+      "pending",
+      "notFinish",
+    ];
+    switch (key) {
+      case "status":
+        await Task.updateMany(
+          {
+            _id: { $in: ids },
+          },
+          {
+            status: value,
+          }
+        );
+        res.json({
+          code: 200,
+          message: "Đổi trạng thái thành công!",
+        });
+        break;
+      case "delete":
+        await Task.updateMany(
+          {
+            _id: { $in: ids },
+          },
+          {
+            deleted: true,
+            deletedAt: new Date(),
+          }
+        );
+        res.json({
+          code: 200,
+          message: "Xóa công việc thành công!",
+        });
+        break;
+      default:
+        res.json({
+          code: 400,
+          message: `Trạng thái không hợp lệ!`,
+        });
+        break;
+    }
+  } catch (error) {}
+};
