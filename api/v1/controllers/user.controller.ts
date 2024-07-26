@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import { generateRandomString } from "../../../helpers/generate";
 
 import md5 from "md5";
+import { request } from "http";
 // [POST] /api/v1/users/register
 export const register = async (req: Request, res: Response): Promise<void> => {
   // Kiểm tra tài khoản tồn tại chưa
@@ -65,5 +66,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     code: 200,
     message: "Đăng nhập thành công!",
     token: token,
+  });
+};
+
+// [GET] /api/v1/users/detail
+export const detail = async (req: Request, res: Response): Promise<void> => {
+  const user = await User.findOne({
+    _id: req.params.id,
+    deleted: false,
+  }).select("-password -token");
+  res.json({
+    code: 200,
+    message: "Thành công!",
+    user: user,
   });
 };
