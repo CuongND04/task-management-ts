@@ -71,13 +71,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 // [GET] /api/v1/users/detail
 export const detail = async (req: Request, res: Response): Promise<void> => {
-  const user = await User.findOne({
-    _id: req.params.id,
-    deleted: false,
-  }).select("-password -token");
   res.json({
     code: 200,
     message: "Thành công!",
-    user: user,
+    info: req["user"],
   });
 };
